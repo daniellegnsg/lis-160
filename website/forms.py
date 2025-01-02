@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
+from .models import Book
 
 class SignUpForm(UserCreationForm):
 	email = forms.EmailField(label="", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Email Address'}))
@@ -17,7 +18,7 @@ class SignUpForm(UserCreationForm):
 		super(SignUpForm, self).__init__(*args, **kwargs)
 
 		self.fields['username'].widget.attrs['class'] = 'form-control'
-		self.fields['username'].widget.attrs['placeholder'] = 'User Name'
+		self.fields['username'].widget.attrs['placeholder'] = 'Username'
 		self.fields['username'].label = ''
 		self.fields['username'].help_text = '<span class="form-text text-muted"><small>Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</small></span>'
 
@@ -30,3 +31,13 @@ class SignUpForm(UserCreationForm):
 		self.fields['password2'].widget.attrs['placeholder'] = 'Confirm Password'
 		self.fields['password2'].label = ''
 		self.fields['password2'].help_text = '<span class="form-text text-muted"><small>Enter the same password as before, for verification.</small></span>'
+
+class AddBookForm(forms.ModelForm):
+	title = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"Title", "class":"form-control"}), label="")
+	author = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"Author", "class":"form-control"}), label="")
+	genre = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"Genre", "class":"form-control"}), label="")
+	year_published = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"Year Published", "class":"form-control"}), label="")
+
+	class Meta:
+		model = Book
+		exclude = ("user",)
